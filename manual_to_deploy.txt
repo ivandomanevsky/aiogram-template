@@ -2,9 +2,7 @@
 
 Add a public SSH key to the configuration before creating the server.
 
-We connect to the server, for example:
-
-ssh root@188.124.51.136
+ssh root@ip
 
 apt update && apt dist-upgrade
 
