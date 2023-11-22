@@ -32,7 +32,7 @@ cat /home/test_user/.ssh/authorized_keys
 
 Disconnect from server
 
-ssh test_user@188.124.51.136
+ssh test_user@ip
 
 sudo nano /etc/ssh/sshd_config
 
