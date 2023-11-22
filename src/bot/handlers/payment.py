@@ -3,6 +3,7 @@ from aiogram.types import LabeledPrice, Message, PreCheckoutQuery
 
 from src.configuration import conf
 
+
 router = Router()
 
 @router.message(F.text == '/payment')
