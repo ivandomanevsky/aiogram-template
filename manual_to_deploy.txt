@@ -1,0 +1,118 @@
+---------- Server setup ----------
+
+Add a public SSH key to the configuration before creating the server.
+
+We connect to the server, for example:
+
+ssh root@188.124.51.136
+
+apt update && apt dist-upgrade
+
+useradd -m -s /bin/bash -G sudo test_user
+
+passwd test_user
+
+apt install ufw
+
+sudo ufw status verbose
+
+ufw app list
+
+ufw allow ssh
+
+ufw enable
+
+su - test_user
+
+mkdir /home/test_user/.ssh/
+
+sudo cp -r /root/.ssh/authorized_keys /home/test_user/.ssh/authorized_keys
+
+sudo chown test_user /home/test_user/.ssh/authorized_keys
+
+cat /home/test_user/.ssh/authorized_keys
+
+Disconnect from server
+
+ssh test_user@188.124.51.136
+
+sudo nano /etc/ssh/sshd_config
+
+In the PermitRootLogin and PasswordAuthentication lines, replace yes with no
+
+Save changes
+
+sudo service ssh restart
+
+python3 -V
+
+---------- Redis install ----------
+
+sudo apt install redis
+
+sudo service redis-server restart
+
+---------- Postgresql install ----------
+
+---------- Bot deploy ----------
+
+sudo apt install git
+
+cd /home/test_user
+
+git clone https://github.com/test_user/test_bot.git
+
+sudo apt install python3.10-venv
+
+cd /home/test_user/test_bot
+
+python3 -m venv venv
+
+source venv/bin/activate
+
+sudo apt install python3-pip
+
+pip install -r requirements.txt
+
+nano .env
+
+Adding the necessary environment variables
+
+Save changes
+
+python3 main.py
+
+---------- Systemd setup ----------
+
+cd /etc/systemd/system/
+
+sudo nano test_bot.service
+
+For example:
+
+[Unit]
+Description=test_bot
+After=syslog.target
+After=network.target
+
+[Service]
+Type=simple
+User=test_user
+WorkingDirectory=/home/test_user/test_bot
+ExecStart=/home/test_user/test_bot/venv/bin/python3 /home/test_user/test_bot/main.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+Save changes
+
+sudo systemctl daemon-reload
+
+sudo systemctl enable test_bot
+
+sudo systemctl start test_bot
+
+sudo systemctl status test_bot
+
+! Note. To manually restart the unit: sudo systemctl restart test_bot
