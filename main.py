@@ -3,6 +3,7 @@ import logging
 
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.redis import RedisStorage, Redis
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from src.configuration import conf
 from src.bot.handlers import start, user
@@ -29,6 +30,11 @@ async def main():
 
     dp.include_router(start.router)
     dp.include_router(user.router)
+
+    scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
+    scheduler.add_job(send_notification, trigger='cron', hour=12, minute=0,
+                      kwargs={'session_maker': session_maker})
+    scheduler.start()
 
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot, session_maker=session_maker)
