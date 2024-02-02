@@ -1,6 +1,8 @@
 ---------- Server setup ----------
 
-Add a public SSH key to the configuration before creating the server.
+Add a public SSH key to the configuration before creating the server or:
+
+cat ~/.ssh/id_rsa.pub | ssh root@ip 'cat >> ~/.ssh/authorized_keys'
 
 ssh root@ip
 
